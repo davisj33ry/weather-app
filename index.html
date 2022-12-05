@@ -23,7 +23,7 @@
   <body>
     <header>The Weather Dashboard</header>
     <div class="parent-container d-flex">
-      <div class="container col-md-4">
+      <div class="container col-md-3">
         <div class="col-lg-12">
           <div class="input-group" id="inputLocation">
             <input
@@ -44,7 +44,7 @@
           </div>
         </div>
       </div>
-      <div class="container">
+      <div class="container header-container d-flex">
         <div>
           <div>City<span id="cityName"></span></div>
           <div>Date & Time: <span id="date"></span></div>
@@ -54,15 +54,10 @@
         </div>
       </div>
     </div>
-    <div class="parent-container d-flex">
-      <h2>5 Day Forecast</h2>
-        <section class=”weather”>
-            <div class=”container”>
-                <div>Date & Time: <span id="dailyDate"></span></div>
-                <div>Temperature: <span id="dailyTemp"></span></div>
-                <div>Wind Speed: <span id="dailyWindSpeed"></span></div>
-                <div>Humidity: <span id="dailyHumidity"></span></div>
-                </div>
+    <h2 class="container col-md-3">5 Day Forecast</h2>
+    <div class="container">
+        <section class="row" id="fiveDayWeather">
+                <!-- section to render weather cards -->
             </div>
         </section>
     </div>

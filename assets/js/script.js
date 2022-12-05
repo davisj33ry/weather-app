@@ -39,7 +39,7 @@ function locationCoordinates() {
 locationCoordinates();
 
 // funtion to get weather for location
-function getWeather() {
+function getWeatherCurrent() {
   const lat = localStorage.getItem("lat");
   const lng = localStorage.getItem("lng");
   const WEATER_API_URL =
@@ -53,25 +53,54 @@ function getWeather() {
     .then((data) => {
       console.log(data);
       $("cityName").html(localStorage.getItem("location"));
-      const date = Date(data.current.dt);
-      const newDate = date.toLocaleString("eng-US");
-      $("#date").html(newDate);
+      const d1 = new Date(data.current.dt * 1000).toLocaleString("eng-US");
+      $("#date").html(d1);
       $("#temp").html(data.current.temp.toFixed() + "° F");
       $("#humidity").html(data.current.humidity.toFixed() + "%");
       $("#windSpeed").html(data.current.wind_speed.toFixed() + " mph");
-
-      data.daily.forEach((value, i) => {
-        if (i <= 4) {
-          $("#dailyDate" + i).html(data.daily[i].dt);
-          $("#dailyTemp" + i).html(data.daily[i].temp.day.toFixed() + "° F");
-          $("#dailyWindSpeed" + i).html(
-            data.daily[i].wind_speed.toFixed() + " mph"
-          );
-          $("#dailyHumidity" + i).html(data.daily[i].humidity.toFixed() + "%");
-        }
-      });
     })
     .catch((err) => console.error(err));
 }
 
-getWeather();
+getWeatherCurrent();
+var numOfDays = 5;
+
+// function to get 5-day weather forecast
+function getFiveDayWeather() {
+  const lat = localStorage.getItem("lat");
+  const lng = localStorage.getItem("lng");
+  const WEATER_API_URL =
+    "https://api.openweathermap.org/data/3.0/onecall?lat=" +
+    lat +
+    "&lon=" +
+    lng +
+    "&appid=60b84b5105b51b98f35a8da6e5c9f174&units=imperial";
+  fetch(WEATER_API_URL)
+    .then((response) => response.json())
+    .then((data) => {
+      for (var i = 0; i <= numOfDays; i++) {
+      const d2 = new Date(data.daily[i].dt * 1000).toDateString();
+      $("#dailyDate" + i).html(d2);  
+      $("#dailyTemp" + i).html(data.daily[i].temp.day.toFixed() + "° F");
+      $("#dailyHumidity" + i).html(data.daily[i].humidity.toFixed() + "%");
+      $("#dailyWindSpeed" + i).html(data.daily[i].wind_speed.toFixed() + " mph");
+      }
+    })
+    .catch((err) => console.error(err));
+}
+
+function renderDailyWeather() {
+    getFiveDayWeather();
+    for (var i = 0; i <= numOfDays; i++) {
+    $("#fiveDayWeather").append(
+        `<div class="card col-md-2">
+            <div>Date: <span id="dailyDate${i}"></span></div>
+            <div>Temperature: <span id="dailyTemp${i}"></span></div>
+            <div>Wind Speed: <span id="dailyWindSpeed${i}"></span></div>
+            <div>Humidity: <span id="dailyHumidity${i}"></span></div>
+        </div>`
+      );
+    };  
+};
+
+renderDailyWeather();
